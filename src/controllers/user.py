@@ -19,6 +19,7 @@ def _list_users():
     return [{'id': user.id, 'username': user.username} for user in users]
 
 
+# criacao do metodo create
 @app.route('/', methods=['GET', 'POST'])
 def handle_user():
     if request.method == 'POST':
@@ -28,6 +29,7 @@ def handle_user():
         return {'users': _list_users()}
 
 
+# criacao do metodo get
 @app.route('/<int:user_id>')
 def get_user(user_id):
     user = db.get_or_404(User, user_id)
@@ -37,6 +39,7 @@ def get_user(user_id):
     }
 
 
+# criacao do metodo update
 @app.route('/<int:user_id>', methods=['PATCH'])
 def update_user(user_id):
     user = db.get_or_404(User, user_id)
@@ -52,3 +55,12 @@ def update_user(user_id):
         "id": user.id,
         "username": user.username,
     }
+
+
+# criação do metodo delete
+@app.route('/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = db.get_or_404(User, user_id)
+    db.session.delete(user)
+    db.session.commit()
+    return '', HTTPStatus.NO_CONTENT
